@@ -168,6 +168,9 @@ const Portfolio = () => {
                     <div className="flex space-x-4 mt-4 relative z-10">
                         <a href="https://github.com/CarlosPerez505" className="text-opacity-60 hover:text-opacity-100 transition-opacity"><Github size={24} /></a>
                         <a href="https://linkedin.com/in/carlos-perez-29b9b6274/" className="text-opacity-60 hover:text-opacity-100 transition-opacity"><Linkedin size={24} /></a>
+                 <a href="#https://github.com//CarlosPerez505" className="text-opacity-60 hover:text-opacity-100 transition-opacity"><Github size={24} /></a>
+                        <a href="#https://linkedin.com/in/carlos-perez-29b9b6274/" className="text-opacity-60 hover:text-opacity-100 transition-opacity"><Linkedin size={24} /></a>
+
                         <a href="mailto:cp3develops@gmail.com" className="text-opacity-60 hover:text-opacity-100 transition-opacity"><Mail size={24} /></a>
                     </div>
                 </header>
@@ -271,3 +274,4 @@ const ProjectGrid = ({ projects, theme }) => (
 );
 
 export default Portfolio;
+
