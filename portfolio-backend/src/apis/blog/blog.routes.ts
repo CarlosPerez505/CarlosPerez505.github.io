@@ -1,15 +1,16 @@
 // blog.route.ts
-import { Router } from "https://deno.land/x/oak@v12.6.0/mod.ts";
-import { createBlogPost } from "./blog.controller.ts";
+import { serve } from "https://deno.land/std@0.153.0/http/server.ts";
+import { createBlogPost } from "./blog.controller.ts";  // Use named import here
 
-const router = new Router();
+const routes = async (req: Request): Promise<Response> => {
+    const url = new URL(req.url);
 
-// Route to create a new blog post
-router.post("/blogs", async (context) => {
-    const request = context.request;
-    const response = await createBlogPost(request);
-    context.response.status = response.status;
-    context.response.body = await response.json();
-});
+    if (req.method === "POST" && url.pathname === "/blogs") {
+        return await createBlogPost(req);
+    }
 
-export default router;
+    return new Response("Not Found", { status: 404 });
+};
+
+// Start the server and listen on port 8000
+await serve(routes, { port: 8000 });
