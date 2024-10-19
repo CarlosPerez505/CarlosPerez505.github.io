@@ -13,7 +13,7 @@ const Footer = () => {
                     rel="noopener noreferrer"
                     className="hover:text-gray-400 transition duration-300"
                 >
-                    <FaGithub size={24} />
+                    <FaGithub size={32} />
                 </a>
                 <a
                     href="https://www.linkedin.com/in/carlos-perez-29b9b6274"
@@ -21,7 +21,7 @@ const Footer = () => {
                     rel="noopener noreferrer"
                     className="hover:text-gray-400 transition duration-300"
                 >
-                    <FaLinkedin size={24} />
+                    <FaLinkedin size={32} />
                 </a>
                 <a
                     href="https://www.facebook.com/share/fnScF3dgixEiE84i/"
@@ -29,7 +29,7 @@ const Footer = () => {
                     rel="noopener noreferrer"
                     className="hover:text-gray-400 transition duration-300"
                 >
-                    <FaFacebook size={24} />
+                    <FaFacebook size={32} />
                 </a>
             </div>
 
