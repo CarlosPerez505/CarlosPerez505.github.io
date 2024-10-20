@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import {Tabs, TabsList, TabsTrigger} from "@radix-ui/react-tabs";
+import { Tabs, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
 import axios from 'axios'; // We'll use axios for making API calls
 
 const VITE_MAPBOX_ACCESS_TOKEN = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
@@ -56,11 +56,6 @@ const Map = () => {
 
         // Optionally add fullscreen control
         map.current.addControl(new mapboxgl.FullscreenControl());
-
-        map.current.on('style.load', () => {
-            map.current.setProjection('globe'); // Ensure globe projection
-            map.current.setPaintProperty('background', 'background-color', isDayMode ? '#87ceeb' : '#001122'); // Set appropriate globe color
-        });
 
         map.current.on('load', () => {
             map.current.resize();
@@ -167,7 +162,6 @@ const Map = () => {
         data.forEach((location, index) => {
             const el = document.createElement('div');
             el.className = 'marker';
-            el.style.backgroundColor = 'red';
             el.style.width = '12px';
             el.style.height = '12px';
             el.style.borderRadius = '50%';
