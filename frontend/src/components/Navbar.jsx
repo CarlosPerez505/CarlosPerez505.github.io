@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link as ScrollLink } from 'react-scroll';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, Moon, Sun, X } from 'lucide-react';
-import VisitorCounter from './features/VisitorCounter.jsx'; // Import the VisitorCounter component
+
 
 const NavBar = ({ theme, toggleTheme }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -137,10 +137,6 @@ const NavBar = ({ theme, toggleTheme }) => {
                             {isAuthenticated ? 'Logout' : 'Login'}
                         </button>
                     </li>
-                    {/* Add Visitor Counter to Navbar */}
-                    <li>
-                        <VisitorCounter />
-                    </li>
                 </ul>
             </div>
 
@@ -238,9 +234,6 @@ const NavBar = ({ theme, toggleTheme }) => {
                     </button>
                 </li>
                 {/* Add Visitor Counter for Mobile Menu */}
-                <li>
-                    <VisitorCounter />
-                </li>
             </ul>
         </nav>
     );
