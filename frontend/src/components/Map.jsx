@@ -242,35 +242,19 @@ const Map = () => {
     return (
         <div className="w-full max-w-7xl mx-auto p-4 bg-gray-900 text-white">
             <div ref={mapContainer} className="w-full h-[500px] sm:h-[600px] rounded-lg overflow-hidden shadow-lg relative">
-                {/* Search bar and toggle buttons inside the map container */}
-                <form onSubmit={handleSearch} className="absolute top-4 left-4 bg-gray-800 p-3 rounded-lg z-10">
+                {/* Search bar moved to the bottom of the map container */}
+                <form onSubmit={handleSearch} className="absolute bottom-4 left-4 bg-gray-800 p-3 rounded-lg z-10 flex flex-col sm:flex-row items-start sm:items-center w-[85%] sm:w-auto">
                     <input
                         type="text"
                         placeholder="Search location..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="px-4 py-2 rounded w-48 text-black"
+                        className="px-4 py-2 rounded mb-2 sm:mb-0 w-full sm:w-48 text-black"
                     />
-                    <button type="submit" className="ml-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                    <button type="submit" className="ml-0 sm:ml-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full sm:w-auto">
                         Search
                     </button>
                 </form>
-
-                <div className="absolute top-4 right-4 bg-gray-800 p-3 rounded-lg z-10">
-                    <Tabs defaultValue="Heatmap" onValueChange={(value) => {
-                        if (value === "Heatmap") handleToggleHeatMap();
-                        if (value === "Markers") handleToggleMarkers();
-                    }}>
-                        <TabsList className="flex gap-4">
-                            <TabsTrigger value="Heatmap" className="px-4 py-2 bg-gray-800 text-white rounded hover:bg-purple-600">
-                                Toggle Heatmap
-                            </TabsTrigger>
-                            <TabsTrigger value="Markers" className="px-4 py-2 bg-gray-800 text-white rounded hover:bg-purple-600">
-                                Toggle Markers
-                            </TabsTrigger>
-                        </TabsList>
-                    </Tabs>
-                </div>
             </div>
         </div>
     );
