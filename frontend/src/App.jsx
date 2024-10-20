@@ -5,9 +5,11 @@ import Portfolio from './pages/Portfolio';
 import BlogList from './components/BlogList.jsx';
 import BlogPost from './components/BlogPost.jsx';
 import Footer from './components/Footer';
+import LoadingScreen from './components/LoadingScreen';
 
 function App() {
     const [theme, setTheme] = useState('dark');
+    const [isLoading, setIsLoading] = useState(true);
 
     const toggleTheme = () => {
         setTheme(theme === 'dark' ? 'light' : 'dark');
@@ -16,6 +18,19 @@ function App() {
     useEffect(() => {
         document.body.className = theme;
     }, [theme]);
+
+    useEffect(() => {
+        // Simulate initial loading
+        const timer = setTimeout(() => {
+            setIsLoading(false);
+        }, 2000); // Adjust this time as needed
+
+        return () => clearTimeout(timer);
+    }, []);
+
+    if (isLoading) {
+        return <LoadingScreen />;
+    }
 
     return (
         <Router>
