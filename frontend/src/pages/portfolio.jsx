@@ -1,12 +1,12 @@
 import React, { lazy, Suspense } from 'react';
-import Hero from "../components/Hero.jsx";
-import AboutMe from "@/components/AboutMe.jsx";
-import Projects from '@/components/PortfolioProjects.jsx';
-import MyMapComponent from "@/components/Map.jsx";
+import Hero from "../components/Hero.jsx"; // Ensure no jsx usage inside Hero style tags
+import AboutMe from "@/components/AboutMe.jsx"; // Ensure no improper usage here as well
+import Projects from '@/components/PortfolioProjects.jsx'; // Check for jsx in styles or attributes
+import MyMapComponent from "@/components/Map.jsx"; // Same with Map component
 import { Element } from 'react-scroll'; // Import Element for section linking
 
 // Lazy load Skills component to optimize performance
-const Skills = lazy(() => import('@/components/Skills'));
+const Skills = lazy(() => import('@/components/Skills')); // Ensure this lazy-loaded component also has no JSX usage
 
 const Portfolio = ({ theme }) => {
     return (
