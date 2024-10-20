@@ -57,6 +57,11 @@ const Map = () => {
         // Optionally add fullscreen control
         map.current.addControl(new mapboxgl.FullscreenControl());
 
+        map.current.on('style.load', () => {
+            map.current.setProjection('globe'); // Ensure globe projection
+            // Set appropriate globe color
+        });
+
         map.current.on('load', () => {
             map.current.resize();
             addHeatMapLayer(fakeHeatMapData);
@@ -162,6 +167,7 @@ const Map = () => {
         data.forEach((location, index) => {
             const el = document.createElement('div');
             el.className = 'marker';
+            el.style.backgroundColor = 'red';
             el.style.width = '12px';
             el.style.height = '12px';
             el.style.borderRadius = '50%';
@@ -205,22 +211,6 @@ const Map = () => {
         });
     };
 
-    const handleToggleDayNight = () => {
-        if (isDayMode) {
-            map.current.setStyle('mapbox://styles/mapbox/dark-v10'); // Switch to night mode
-            map.current.once('style.load', () => {
-                map.current.setPaintProperty('background', 'background-color', '#001122'); // Night mode globe color
-                map.current.setProjection('globe');
-            });
-        } else {
-            map.current.setStyle('mapbox://styles/mapbox/light-v10'); // Switch to day mode
-            map.current.once('style.load', () => {
-                map.current.setPaintProperty('background', 'background-color', '#87ceeb'); // Day mode globe color
-                map.current.setProjection('globe');
-            });
-        }
-        setIsDayMode(!isDayMode); // Toggle the mode
-    };
 
     // Search function using Mapbox Geocoding API
     const handleSearch = async (e) => {
@@ -286,6 +276,20 @@ const Map = () => {
                 ref={mapContainer}
                 className="w-full h-[500px] sm:h-[600px] rounded-lg overflow-hidden shadow-lg"
             />
+
+            {/* Search bar now below the map */}
+            <form onSubmit={handleSearch} className="mt-4">
+                <input
+                    type="text"
+                    placeholder="Search location..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="px-4 py-2 rounded w-full text-black"
+                />
+                <button type="submit" className="mt-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                    Search
+                </button>
+            </form>
         </div>
     );
 };

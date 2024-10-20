@@ -27,6 +27,15 @@ const Hero = () => {
             }
         );
 
+        // Background Image Animation
+        gsap.to('.background-image', {
+            scale: 1.05,
+            duration: 8,
+            repeat: -1,
+            yoyo: true,
+            ease: 'power1.inOut',
+        });
+
         // Glimmering Border Animation
         gsap.to('.glimmer-border', {
             backgroundPosition: '200% center',
