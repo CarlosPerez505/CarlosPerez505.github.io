@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Link as ScrollLink } from 'react-scroll';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, Moon, Sun, X } from 'lucide-react';
-
+import LoginButton from './LoginButton';
 
 const NavBar = ({ theme, toggleTheme }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [offset, setOffset] = useState(-20);
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
     const location = useLocation();
+    const navigate = useNavigate();
 
     const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -29,14 +29,10 @@ const NavBar = ({ theme, toggleTheme }) => {
 
     const isBlogPage = location.pathname.startsWith('/blog');
 
-    // Login handler (simulating login for now)
-    const handleLoginLogout = () => {
-        if (isAuthenticated) {
-            setIsAuthenticated(false);
-        } else {
-            // This is where the actual login logic will go.
-            setIsAuthenticated(true);
-        }
+    // Handle navigation to the login page
+    const handleLoginClick = () => {
+        navigate('/login');
+        setIsOpen(false); // Close the menu when navigating to login
     };
 
     return (
@@ -118,28 +114,23 @@ const NavBar = ({ theme, toggleTheme }) => {
                         </Link>
                     </li>
                     <li>
-                        <button
-                            className="p-2 rounded-full transition-colors duration-300 focus:outline-none"
-                            onClick={toggleTheme}
-                        >
+                        <LoginButton onClick={toggleTheme}>
                             {theme === 'dark' ? (
                                 <Sun className="text-yellow-500" size={24} />
                             ) : (
                                 <Moon className="text-gray-500" size={24} />
                             )}
-                        </button>
+                        </LoginButton>
                     </li>
                     <li>
-                        <button
-                            className="text-white hover:text-gray-300 transition-colors duration-300 cursor-pointer"
-                            onClick={handleLoginLogout}
-                        >
-                            {isAuthenticated ? 'Logout' : 'Login'}
-                        </button>
+                        <LoginButton onClick={handleLoginClick} className="text-white">
+                            Login
+                        </LoginButton>
                     </li>
                 </ul>
             </div>
 
+            {/* Mobile Menu */}
             <ul className={`md:hidden mt-4 space-y-4 ${isOpen ? 'block' : 'hidden'}`}>
                 {isBlogPage && (
                     <li>
@@ -214,26 +205,19 @@ const NavBar = ({ theme, toggleTheme }) => {
                     </Link>
                 </li>
                 <li>
-                    <button
-                        className="block text-white py-2"
-                        onClick={toggleTheme}
-                    >
+                    <LoginButton onClick={toggleTheme}>
                         {theme === 'dark' ? (
                             <Sun className="text-yellow-500" size={24} />
                         ) : (
                             <Moon className="text-gray-500" size={24} />
                         )}
-                    </button>
+                    </LoginButton>
                 </li>
                 <li>
-                    <button
-                        className="text-white hover:text-gray-300 transition-colors duration-300 cursor-pointer"
-                        onClick={handleLoginLogout}
-                    >
-                        {isAuthenticated ? 'Logout' : 'Login'}
-                    </button>
+                    <LoginButton onClick={handleLoginClick} className="block text-white py-2">
+                        Login
+                    </LoginButton>
                 </li>
-                {/* Add Visitor Counter for Mobile Menu */}
             </ul>
         </nav>
     );

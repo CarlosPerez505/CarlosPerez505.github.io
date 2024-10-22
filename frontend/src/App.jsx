@@ -6,6 +6,9 @@ import BlogList from './components/BlogList.jsx';
 import BlogPost from './components/BlogPost.jsx';
 import Footer from './components/Footer';
 import LoadingScreen from './components/LoadingScreen';
+import AdminPage from './components/AdminPage';
+import Login from "@/pages/Login.jsx";
+import BlogAdmin from "@/pages/blogAdmin.jsx"; // Import AdminPage
 
 function App() {
     const [theme, setTheme] = useState('dark');
@@ -49,6 +52,13 @@ function App() {
 
                         {/* Route for Individual Blog Post */}
                         <Route path="/blog/:id" element={<BlogPost />} />
+
+                        {/* Route for Admin Page */}
+                        <Route path="/admin" element={<AdminPage />} />
+
+                        <Route path="/login" element={<Login />} />
+
+                        <Route path="/blogAdmin" element={<BlogAdmin />} />
                     </Routes>
                 </div>
 
