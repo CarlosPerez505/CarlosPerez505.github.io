@@ -20,13 +20,20 @@ services:
       DATABASE_HOST: mysql
       DATABASE_USER: root
       DATABASE_PASSWORD: blog
-      DATABASE_NAME: blog_bd
+      DATABASE_NAME: blog_db  # Corrected the database name
     ports:
       - "5000:5000"
+    volumes:
+      - .:/app
+      - /app/node_modules
     depends_on:
       - mysql
     networks:
       - backend_network
+    command: npx nodemon server.mjs  # Add nodemon for the backend
+    dns:
+      - 8.8.8.8  # Google's public DNS
+      - 8.8.4.4
 
 networks:
   backend_network:

@@ -1,10 +1,14 @@
 import mysql from 'mysql2/promise';
 
-const pool = mysql.createPool({
+// MySQL connection configuration using environment variables
+const dbConfig = {
     host: process.env.DATABASE_HOST || 'localhost',
     user: process.env.DATABASE_USER || 'root',
     password: process.env.DATABASE_PASSWORD || '',
-    database: process.env.DATABASE_NAME || ''
-});
+    database: process.env.DATABASE_NAME || 'test',
+};
 
-export default pool;
+// Create a connection pool
+const db = await mysql.createPool(dbConfig);
+
+export default db;
