@@ -4,40 +4,47 @@ import { useNavigate } from 'react-router-dom';
 const Login = () => {
     const navigate = useNavigate();
 
-    const handleAdminLogin = (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault(); // Prevents default form submission behavior
         navigate('/blogAdmin');
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100">
-            <div className="bg-white p-6 rounded-md shadow-md w-80">
-                <h2 className="text-2xl font-bold mb-4 text-center">Login</h2>
-                <form onSubmit={handleAdminLogin}>
-                    <div className="mb-4">
-                        <label className="block mb-1 text-gray-700">Username</label>
+        <div className="min-h-screen bg-[#1a1f2e] flex items-center justify-center">
+            <div className="w-full max-w-md bg-white rounded-lg p-8">
+                <h2 className="text-2xl font-semibold text-center text-[#1a1f2e] mb-8">Login</h2>
+
+                <form onSubmit={handleSubmit} className="space-y-6">
+                    <div>
+                        <label className="block text-[#1a1f2e] mb-2">Username</label>
                         <input
                             type="text"
-                            className="w-full p-2 border border-gray-300 rounded"
                             placeholder="Enter your username"
-                            required
+                            className="w-full px-4 py-3 rounded border border-gray-200 focus:outline-none focus:border-gray-400"
                         />
                     </div>
-                    <div className="mb-4">
-                        <label className="block mb-1 text-gray-700">Password</label>
+
+                    <div>
+                        <label className="block text-[#1a1f2e] mb-2">Password</label>
                         <input
                             type="password"
-                            className="w-full p-2 border border-gray-300 rounded"
                             placeholder="Enter your password"
-                            required
+                            className="w-full px-4 py-3 rounded border border-gray-200 focus:outline-none focus:border-gray-400"
                         />
                     </div>
+
                     <button
                         type="submit"
-                        className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition"
+                        className="w-full bg-[#1a1f2e] text-white py-3 rounded hover:bg-[#252b3b] transition-colors"
                     >
-                        Login
+                        Sign In
                     </button>
+
+                    <div className="text-center">
+                        <a href="#" className="text-[#1a1f2e] hover:text-[#252b3b] text-sm">
+                            Forgot your password?
+                        </a>
+                    </div>
                 </form>
             </div>
         </div>
