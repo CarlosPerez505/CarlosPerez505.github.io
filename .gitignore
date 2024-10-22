@@ -1,0 +1,35 @@
+# Basic Jekyll gitignores (synchronize to Jekyll.gitignore)
+_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
+
+# Additional Ruby/bundler ignore for when you run: bundle install
+/vendor
+
+# Specific ignore for GitHub Pages
+Gemfile.lock
+
+# IDEs and Editors
+.idea
+.vscode/
+*.sublime-workspace
+*.sublime-project
+
+# Node.js related files (if applicable)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+.env.local
+
+# WebStorm project settings
+.idea/
+*.iml
+

@@ -1,0 +1,24 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs",
+    "dev": "nodemon server.mjs",
+    "build": "docker build -t backend-image .",
+    "docker:start": "docker run -p 5000:5000 backend-image",
+    "docker:compose": "docker-compose up --build",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "dependencies": {
+    "express": "^4.18.0",
+    "mysql2": "^3.11.3"
+  },
+  "devDependencies": {
+    "eslint": "^8.48.0",
+    "nodemon": "^2.0.22"
+  }
+}
