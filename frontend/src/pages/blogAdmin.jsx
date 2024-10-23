@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { PlusCircle, Pencil, Trash2 } from 'lucide-react';
 import * as Dialog from '@radix-ui/react-dialog';
 
-// Base components
+// Base components remain the same
 const Input = React.forwardRef(({ className = '', ...props }, ref) => {
     return (
         <input
@@ -53,10 +53,11 @@ const AdminPage = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
+    const [updateKey, setUpdateKey] = useState(0); // Add this to force re-render when needed
 
     useEffect(() => {
         fetchBlogs();
-    }, []);
+    }, [updateKey]); // Add updateKey as a dependency
 
     const fetchBlogs = async () => {
         setIsLoading(true);
@@ -91,8 +92,7 @@ const AdminPage = () => {
 
             if (!response.ok) throw new Error('Failed to create blog');
 
-            const newBlog = await response.json();
-            setBlogs((prevBlogs) => [newBlog, ...prevBlogs]); // Add to start of list
+            await fetchBlogs(); // Fetch fresh data after creation
             resetForm();
         } catch (error) {
             setError('Failed to create blog. Please try again.');
@@ -119,11 +119,9 @@ const AdminPage = () => {
 
             if (!response.ok) throw new Error('Failed to update blog');
 
-            const updatedBlog = await response.json();
-            setBlogs((prevBlogs) =>
-                prevBlogs.map((blog) => (blog.id === id ? updatedBlog : blog))
-            );
+            await fetchBlogs(); // Fetch fresh data after update
             resetForm();
+            setUpdateKey(prev => prev + 1); // Force a re-render
         } catch (error) {
             setError('Failed to update blog. Please try again.');
             console.error('Error updating blog:', error);
@@ -145,16 +143,17 @@ const AdminPage = () => {
 
             if (!response.ok) throw new Error('Failed to delete blog');
 
-            setBlogs((prev) => prev.filter((blog) => blog.id !== id));
+            await fetchBlogs(); // Fetch fresh data after deletion
+            setUpdateKey(prev => prev + 1); // Force a re-render
         } catch (error) {
             setError('Failed to delete blog. Please try again.');
             console.error('Error deleting blog:', error);
-            fetchBlogs(); // Refresh list in case of error
         } finally {
             setIsLoading(false);
         }
     };
 
+    // Rest of the component remains the same...
     const resetForm = () => {
         setFormData({
             title: '',
@@ -172,7 +171,7 @@ const AdminPage = () => {
             ...prev,
             [name]: value || '',
         }));
-        setError(''); // Clear error when user starts typing
+        setError('');
     };
 
     const handleEdit = (blog) => {
@@ -189,15 +188,13 @@ const AdminPage = () => {
 
     const renderPreview = (content) => {
         if (!content) return 'No content available.';
-
-        // Split content into paragraphs and preserve formatting
         const paragraphs = content.split('\n').filter(p => p.trim());
         const preview = paragraphs[0] || '';
-
         if (preview.length <= 100) return preview;
         return preview.substring(0, 100).trim() + '...';
     };
 
+    // JSX remains the same...
     return (
         <div className="min-h-screen bg-gray-900 text-gray-100">
             <div className="mx-auto max-w-3xl p-4">
