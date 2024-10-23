@@ -64,6 +64,42 @@ export const createBlog = async (req, res) => {
     }
 };
 
+// Update an existing blog by ID
+export const updateBlog = async (req, res) => {
+    const { id } = req.params;
+    const { title, content, media_url, media_type } = req.body;
+
+    // Validate input
+    if (!title || !content) {
+        return res.status(400).json({ error: 'Title and content are required.' });
+    }
+
+    const allowedMediaTypes = ['image', 'video', 'none'];
+    if (media_type && !allowedMediaTypes.includes(media_type)) {
+        return res.status(400).json({ error: 'Invalid media type.' });
+    }
+
+    try {
+        // Check if the blog exists
+        const [rows] = await db.query('SELECT * FROM blogs WHERE id = ?', [id]);
+        if (rows.length === 0) {
+            return res.status(404).json({ error: 'Blog not found' });
+        }
+
+        // Update the blog post in the database
+        await db.query(
+            'UPDATE blogs SET title = ?, content = ?, media_url = ?, media_type = ? WHERE id = ?',
+            [title, content, media_url || null, media_type || 'none', id]
+        );
+
+        res.status(200).json({ message: 'Blog updated successfully' });
+    } catch (err) {
+        res.status(500).json({ error: 'Database error', details: err.message });
+    }
+};
+
+
+
 // Delete a blog by ID
 export const deleteBlog = async (req, res) => {
     const { id } = req.params;
@@ -84,3 +120,5 @@ export const deleteBlog = async (req, res) => {
         res.status(500).json({ error: 'Database error', details: err.message });
     }
 };
+
+
