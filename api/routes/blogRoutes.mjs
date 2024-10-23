@@ -1,10 +1,11 @@
-import { Router } from 'express';
-import {createBlog, getBlogs} from '../controllers/blogController.mjs';
+import express from 'express';
+import { createBlog, deleteBlog, getBlogById, getBlogs } from '../controllers/blogController.mjs';
 
-const router = Router();
+const router = express.Router();
 
-// Define routes
 router.get('/', getBlogs);
+router.get('/:id', getBlogById);
 router.post('/', createBlog);
+router.delete('/:id', deleteBlog);
 
 export default router;

@@ -12,7 +12,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(morgan('dev'));
 
-// Route middleware
+// Mount the blog routes
 app.use('/blogs', blogRoutes);
 
 // Error-handling middleware (must be at the end)
