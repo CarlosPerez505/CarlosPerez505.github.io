@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { PlusCircle, Pencil, Trash2, X, Image, Video, FileText, Eye } from 'lucide-react';
+import { PlusCircle, Pencil, Trash2 } from 'lucide-react';
 import * as Dialog from '@radix-ui/react-dialog';
 
 // Base components
@@ -52,20 +52,36 @@ const AdminPage = () => {
     });
     const [isEditing, setIsEditing] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState('');
+
+    useEffect(() => {
+        fetchBlogs();
+    }, []);
 
     const fetchBlogs = async () => {
+        setIsLoading(true);
         try {
             const response = await fetch('http://localhost:5000/blogs');
             if (!response.ok) throw new Error('Failed to fetch blogs');
             const data = await response.json();
-            setBlogs(data || []); // Set empty array if data is null or undefined
+            setBlogs(data || []);
+            setError('');
         } catch (error) {
+            setError('Failed to fetch blogs. Please try again later.');
             console.error('Error fetching blogs:', error);
+        } finally {
+            setIsLoading(false);
         }
     };
 
     const createBlog = async () => {
+        if (!formData.title.trim() || !formData.content.trim()) {
+            setError('Title and content are required');
+            return;
+        }
+
         setIsLoading(true);
+        setError('');
         try {
             const response = await fetch('http://localhost:5000/blogs', {
                 method: 'POST',
@@ -76,12 +92,64 @@ const AdminPage = () => {
             if (!response.ok) throw new Error('Failed to create blog');
 
             const newBlog = await response.json();
-
-            // Add the newly created blog to the state
-            setBlogs((prevBlogs) => [...prevBlogs, newBlog]);
+            setBlogs((prevBlogs) => [newBlog, ...prevBlogs]); // Add to start of list
             resetForm();
         } catch (error) {
+            setError('Failed to create blog. Please try again.');
             console.error('Error creating blog:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const updateBlog = async (id) => {
+        if (!formData.title.trim() || !formData.content.trim()) {
+            setError('Title and content are required');
+            return;
+        }
+
+        setIsLoading(true);
+        setError('');
+        try {
+            const response = await fetch(`http://localhost:5000/blogs/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData),
+            });
+
+            if (!response.ok) throw new Error('Failed to update blog');
+
+            const updatedBlog = await response.json();
+            setBlogs((prevBlogs) =>
+                prevBlogs.map((blog) => (blog.id === id ? updatedBlog : blog))
+            );
+            resetForm();
+        } catch (error) {
+            setError('Failed to update blog. Please try again.');
+            console.error('Error updating blog:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const deleteBlog = async (id) => {
+        if (!window.confirm('Are you sure you want to delete this blog post?')) {
+            return;
+        }
+
+        setIsLoading(true);
+        try {
+            const response = await fetch(`http://localhost:5000/blogs/${id}`, {
+                method: 'DELETE'
+            });
+
+            if (!response.ok) throw new Error('Failed to delete blog');
+
+            setBlogs((prev) => prev.filter((blog) => blog.id !== id));
+        } catch (error) {
+            setError('Failed to delete blog. Please try again.');
+            console.error('Error deleting blog:', error);
+            fetchBlogs(); // Refresh list in case of error
         } finally {
             setIsLoading(false);
         }
@@ -95,14 +163,16 @@ const AdminPage = () => {
             media_type: 'none',
         });
         setIsEditing(false);
+        setError('');
     };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({
             ...prev,
-            [name]: value || '', // Ensure empty string instead of null/undefined
+            [name]: value || '',
         }));
+        setError(''); // Clear error when user starts typing
     };
 
     const handleEdit = (blog) => {
@@ -114,22 +184,24 @@ const AdminPage = () => {
             media_type: blog.media_type || 'none',
         });
         setIsEditing(true);
+        setError('');
     };
 
-    const deleteBlog = async (id) => {
-        setBlogs((prev) => prev.filter((blog) => blog.id !== id));
-        try {
-            await fetch(`http://localhost:5000/blogs/${id}`, { method: 'DELETE' });
-        } catch (error) {
-            console.error('Error deleting blog:', error);
-            fetchBlogs();
-        }
+    const renderPreview = (content) => {
+        if (!content) return 'No content available.';
+
+        // Split content into paragraphs and preserve formatting
+        const paragraphs = content.split('\n').filter(p => p.trim());
+        const preview = paragraphs[0] || '';
+
+        if (preview.length <= 100) return preview;
+        return preview.substring(0, 100).trim() + '...';
     };
 
     return (
         <div className="min-h-screen bg-gray-900 text-gray-100">
-            {/* Form section */}
             <div className="mx-auto max-w-3xl p-4">
+                {/* Form section */}
                 <div className="mb-8 rounded-xl bg-gray-800/50 p-4 ring-1 ring-gray-700">
                     <div className="mb-6 flex items-center gap-2">
                         {isEditing ? (
@@ -141,6 +213,12 @@ const AdminPage = () => {
                             {isEditing ? 'Edit Blog Post' : 'Create New Blog Post'}
                         </h2>
                     </div>
+
+                    {error && (
+                        <div className="mb-4 rounded-lg bg-red-500/10 p-3 text-red-400">
+                            {error}
+                        </div>
+                    )}
 
                     <div className="space-y-4">
                         <Input
@@ -224,10 +302,13 @@ const AdminPage = () => {
                                         </div>
                                     </div>
                                     <p className="mb-2 text-sm text-gray-400">
-                                        {blog?.content?.length > 100
-                                            ? `${blog.content.substring(0, 100)}...`
-                                            : blog.content || 'No content available.'}
+                                        {renderPreview(blog?.content)}
                                     </p>
+                                    {blog?.media_url && blog?.media_type !== 'none' && (
+                                        <div className="mt-2 text-sm text-gray-500">
+                                            {blog.media_type.charAt(0).toUpperCase() + blog.media_type.slice(1)}: {blog.media_url}
+                                        </div>
+                                    )}
                                 </div>
                             ))
                         ) : (

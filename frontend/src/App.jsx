@@ -59,6 +59,8 @@ function App() {
                         <Route path="/login" element={<Login />} />
 
                         <Route path="/blogAdmin" element={<BlogAdmin />} />
+
+                        <Route path="/blog/:id" element={<BlogPost />} />
                     </Routes>
                 </div>
 
