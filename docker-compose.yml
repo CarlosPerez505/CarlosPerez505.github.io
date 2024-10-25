@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-container
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: E3?QcBD!
+      MYSQL_DATABASE: portfolio_backend
+      MYSQL_USER: portfolio_user
+      MYSQL_PASSWORD: E3?QcBD!
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - backend-network
+
+  backend:
+    build:
+      context: ./portfolio-backend  # Path to your backend code
+    container_name: backend-container
+    command: ["deno", "run", "--allow-net", "--allow-read", "src/app.ts"]  # Adjust this based on your Deno entry file
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mysql
+    environment:
+      DB_HOSTNAME: mysql
+      DB_USERNAME: portfolio_user
+      DB_PASSWORD: E3?QcBD!
+      DB_NAME: portfolio_backend
+      DB_PORT: 3306
+    networks:
+      - backend-network
+
+networks:
+  backend-network:
+    driver: bridge
+
+volumes:
+  db_data:

@@ -1,0 +1,44 @@
+# Ignore node_modules and deno deps (dependencies directories)
+node_modules/
+.deno/
+deps/
+
+# Ignore all Docker-related files
+.dockerignore
+Dockerfile
+docker-compose.yml
+
+# Ignore environment variables files containing sensitive information
+.env
+.env.local
+
+# Ignore logs
+*.log
+logs/
+*.pid
+
+# Ignore build artifacts
+dist/
+out/
+build/
+
+# Ignore editor or IDE settings
+.vscode/
+.idea/
+*.swp
+
+# Ignore OS generated files
+.DS_Store
+Thumbs.db
+
+# Ignore test files
+*.test.*
+tests/
+
+# Ignore git repository files
+.git/
+.gitignore
+
+# Ignore uploads directory (optional)
+uploads/blogs/
+
