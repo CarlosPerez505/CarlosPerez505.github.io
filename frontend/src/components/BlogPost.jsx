@@ -13,7 +13,7 @@ const BlogPost = () => {
             setError(null);
             try {
                 console.log(`Fetching post with ID: ${id}`); // Debug line
-                const response = await fetch(`http://localhost:5000/blogs/${id}`);
+                const response = await fetch(`https://localhost:5000/blogs/${id}`);
                 if (!response.ok) {
                     throw new Error(response.status === 404 ? 'Post not found' : 'Failed to fetch post');
                 }

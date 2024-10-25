@@ -13,7 +13,7 @@ const BlogList = () => {
         setIsLoading(true);
         setError(null);
         try {
-            const response = await fetch('http://localhost:5000/blogs');
+            const response = await fetch('https://localhost:5000/blogs');
             if (!response.ok) throw new Error('Failed to fetch posts');
 
             const data = await response.json();
@@ -68,7 +68,7 @@ const BlogList = () => {
         }
 
         try {
-            const response = await fetch(`http://localhost:5000/blogs/${id}`, {
+            const response = await fetch(`https://localhost:5000/blogs/${id}`, {
                 method: 'DELETE'
             });
 

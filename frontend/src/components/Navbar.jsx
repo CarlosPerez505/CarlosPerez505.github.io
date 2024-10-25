@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Link as ScrollLink } from 'react-scroll';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Menu, Moon, Sun, X } from 'lucide-react';
-import LoginButton from './LoginButton';
+import { useAuth0 } from '@auth0/auth0-react'; // Import Auth0 hooks
 
 const NavBar = ({ theme, toggleTheme }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [offset, setOffset] = useState(-20);
     const location = useLocation();
-    const navigate = useNavigate();
+    const { isAuthenticated, loginWithRedirect, logout } = useAuth0(); // Destructure Auth0 functions
 
     const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -28,12 +28,6 @@ const NavBar = ({ theme, toggleTheme }) => {
     }, []);
 
     const isBlogPage = location.pathname.startsWith('/blog');
-
-    // Handle navigation to the login page
-    const handleLoginClick = () => {
-        navigate('/login');
-        setIsOpen(false); // Close the menu when navigating to login
-    };
 
     return (
         <nav className="bg-gray-800 p-4 sticky top-0 z-50">
@@ -114,18 +108,30 @@ const NavBar = ({ theme, toggleTheme }) => {
                         </Link>
                     </li>
                     <li>
-                        <LoginButton onClick={toggleTheme}>
+                        <button onClick={toggleTheme} className="text-white">
                             {theme === 'dark' ? (
                                 <Sun className="text-yellow-500" size={24} />
                             ) : (
                                 <Moon className="text-gray-500" size={24} />
                             )}
-                        </LoginButton>
+                        </button>
                     </li>
                     <li>
-                        <LoginButton onClick={handleLoginClick} className="text-white">
-                            Login
-                        </LoginButton>
+                        {isAuthenticated ? (
+                            <button
+                                onClick={() => logout({ returnTo: window.location.origin })}
+                                className="text-white hover:text-gray-300 transition-colors duration-300"
+                            >
+                                Logout
+                            </button>
+                        ) : (
+                            <button
+                                onClick={() => loginWithRedirect()}
+                                className="text-white hover:text-gray-300 transition-colors duration-300"
+                            >
+                                Login
+                            </button>
+                        )}
                     </li>
                 </ul>
             </div>
@@ -205,18 +211,30 @@ const NavBar = ({ theme, toggleTheme }) => {
                     </Link>
                 </li>
                 <li>
-                    <LoginButton onClick={toggleTheme}>
+                    <button onClick={toggleTheme} className="text-white">
                         {theme === 'dark' ? (
                             <Sun className="text-yellow-500" size={24} />
                         ) : (
                             <Moon className="text-gray-500" size={24} />
                         )}
-                    </LoginButton>
+                    </button>
                 </li>
                 <li>
-                    <LoginButton onClick={handleLoginClick} className="block text-white py-2">
-                        Login
-                    </LoginButton>
+                    {isAuthenticated ? (
+                        <button
+                            onClick={() => logout({ returnTo: window.location.origin })}
+                            className="block text-white py-2"
+                        >
+                            Logout
+                        </button>
+                    ) : (
+                        <button
+                            onClick={() => loginWithRedirect()}
+                            className="block text-white py-2"
+                        >
+                            Login
+                        </button>
+                    )}
                 </li>
             </ul>
         </nav>
