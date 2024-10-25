@@ -3,6 +3,7 @@ services:
   mysql:
     image: mysql:latest
     container_name: mysql_container
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: blog
       MYSQL_DATABASE: blog_db
@@ -14,13 +15,14 @@ services:
       - backend_network
 
   backend:
-    build: .
+    build: .  # Set to the current directory
     container_name: backend_container
+    restart: always
     environment:
       DATABASE_HOST: mysql
       DATABASE_USER: root
       DATABASE_PASSWORD: blog
-      DATABASE_NAME: blog_db  # Corrected the database name
+      DATABASE_NAME: blog_db
     ports:
       - "5000:5000"
     volumes:
@@ -30,10 +32,7 @@ services:
       - mysql
     networks:
       - backend_network
-    command: npx nodemon server.mjs  # Add nodemon for the backend
-    dns:
-      - 8.8.8.8  # Google's public DNS
-      - 8.8.4.4
+    command: npx nodemon server.mjs
 
 networks:
   backend_network:

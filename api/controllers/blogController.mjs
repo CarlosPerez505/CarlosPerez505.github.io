@@ -3,6 +3,7 @@ import moment from 'moment';
 
 // Get all blogs
 export const getBlogs = async (req, res) => {
+    console.log('GET /blogs endpoint hit');
     try {
         const [blogs] = await db.query('SELECT * FROM blogs');
         if (blogs.length === 0) {
@@ -13,6 +14,7 @@ export const getBlogs = async (req, res) => {
         res.status(500).json({ error: 'Database error', details: err.message });
     }
 };
+
 
 // Fetch a blog post by ID
 export const getBlogById = async (req, res) => {
